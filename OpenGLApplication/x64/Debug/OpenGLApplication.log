@@ -1,0 +1,24 @@
+﻿  glad.c
+  shader.cpp
+  Source.cpp
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(19,32): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(20,33): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(168,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(196,56): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(197,60): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(205,56): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(206,60): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(214,56): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(215,60): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(223,56): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(224,60): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(233,51): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(234,55): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(326,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(327,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(328,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(329,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(336,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  stb_image.cpp
+  Generating Code...
+  OpenGLApplication.vcxproj -> C:\Users\antox\source\repos\OpenGLApplication\x64\Debug\OpenGLApplication.exe
