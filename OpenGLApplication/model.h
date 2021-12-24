@@ -53,7 +53,19 @@ class Model
 
 			processNode(scene->mRootNode, scene);
 		}
-		void processNode(aiNode *node, const aiScene *scene);
+		void processNode(aiNode* node, const aiScene* scene)
+		{
+			for (unsigned int i = 0; i < node->mNumMeshes; i++)
+			{
+				aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+				meshes.push_back(processMesh(mesh, scene));
+			}
+
+			for (unsigned int i = 0; i < node->mNumChildren; i++)
+			{
+				processNode(node->mChildren[i], scene);
+			}
+		}
 		Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 		vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 };
