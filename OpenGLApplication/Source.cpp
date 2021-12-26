@@ -61,7 +61,7 @@ int main()
 
 	Shader ourShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/model_loading.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/model_loading.frag");
 
-	Model ourModel("C:/Libs/OpenGL/Models/model1/source/RippedModels");
+	Model ourModel("C:/Libs/OpenGL/Models/super-mario/source/RippedModel/model.obj");
 
 	// Wireframe
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

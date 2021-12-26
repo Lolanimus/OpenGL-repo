@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Libs\OpenGL\GLFW\Includes;C:\Libs\OpenGL\GLAD\include;C:\Users\antox\source\repos\OpenGLApplication\;C:\Libs\OpenGL\stb_image;C:\Libs\OpenGL;C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Libs\OpenGL\GLFW\Includes;C:\Libs\OpenGL\GLAD\include;C:\Users\antox\source\repos\OpenGLApplication\;C:\Libs\OpenGL\stb_image;C:\Libs\OpenGL;C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication;C:\Libs\OpenGL\Libs;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Libs\OpenGL\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Libs\OpenGL\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Libs\OpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
