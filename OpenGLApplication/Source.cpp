@@ -1,4 +1,4 @@
-#include "glad/glad.h"
+﻿#include "glad/glad.h"
 #include "glfw3.h"
 #include "shader.h"
 #include "camera.h"
@@ -53,13 +53,14 @@ int main()
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
-	}
+	}    
+	
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 
 	Shader ourShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/model_loading.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/model_loading.frag");
 
 	Model ourModel("C:/Libs/OpenGL/Models/super-mario/source/RippedModel/mario.obj");
-
-	Shader shaderSingleColor("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/model_loading.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/stencil_single_color.frag");
 
 	float cubeVertices[] = {
 		// Coords            // Tex Coords
@@ -116,6 +117,24 @@ int main()
 		5.0f, -0.5f, -5.0f,  2.0f, 2.0f
 	};
 
+	float vegetationVertices[] = {
+		// Coords            // TexCoords
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+		1.0f,  0.5f,  0.0f,  1.0f,  0.0f
+	};
+
+	vector<glm::vec3> windows;
+	windows.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
+	windows.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
+	windows.push_back(glm::vec3(0.0f, 0.0f, 0.7f));
+	windows.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
+	windows.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
+
 	// cubes' VAO
 	unsigned int cubeVAO, cubeVBO;
 	glGenVertexArrays(1, &cubeVAO);
@@ -142,23 +161,29 @@ int main()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glBindVertexArray(0);
 
+	// Vegetation VAO
+	unsigned int vegetationVAO, vegetationVBO;
+	glGenVertexArrays(1, &vegetationVAO);
+	glGenBuffers(1, &vegetationVBO);
+	glBindVertexArray(vegetationVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, vegetationVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vegetationVertices), &vegetationVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glBindVertexArray(0);
+
 	// Texture import
 	unsigned int cubeTexture = loadTexture("C:/Libs/OpenGL/Textures/marble.jpg");
 	unsigned int floorTexture = loadTexture("C:/Libs/OpenGL/Textures/metal.jpg");
+	unsigned int vegetationTexture = loadTexture("C:/Libs/OpenGL/Textures/blending_transparent_window.png");
 
 	// Shader settings
 	ourShader.use();
 	ourShader.setInt("texture1", 0);
 
-	
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	shaderSingleColor.use();
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
-	glEnable(GL_STENCIL_TEST);
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Wireframe
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -171,27 +196,22 @@ int main()
 
 		processInput(window);
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		std::map<float, glm::vec3> sorted;
+		for (unsigned int i = 0; i < windows.size(); i++)
+		{
+			float distance = glm::length(camera.Position - windows[i]);
+			sorted[distance] = windows[i];
+		}
 
-		shaderSingleColor.use();
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		ourShader.use();
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		shaderSingleColor.setMat4("view", view);
-		shaderSingleColor.setMat4("projection", projection);
-
-		ourShader.use();
 		ourShader.setMat4("view", view);
 		ourShader.setMat4("projection", projection);
-
-		glStencilMask(0x00);
-		// Rendering of floor
-		glBindVertexArray(planeVAO);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
-		ourShader.setMat4("model", glm::mat4(1.0f));
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
 
 		// Redndering of model
 		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -199,8 +219,6 @@ int main()
 		//ourShader.setMat4("model", model);
 		//ourModel.Draw(ourShader);
 
-		glStencilFunc(GL_ALWAYS, 1, 0xFF);
-		glStencilMask(0xFF);
 		// Rendering of cubes
 		glBindVertexArray(cubeVAO);
 		glActiveTexture(GL_TEXTURE0);
@@ -213,28 +231,23 @@ int main()
 		ourShader.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-		glStencilMask(0x00);
-		glDisable(GL_DEPTH_TEST);
-		shaderSingleColor.use();
-		float scale = 1.1;
-		// Rendering of cubes
-		glBindVertexArray(cubeVAO);
-		glBindTexture(GL_TEXTURE_2D, cubeTexture);
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-		model = glm::scale(model, glm::vec3(scale, scale, scale));
-		shaderSingleColor.setMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(scale, scale, scale));
-		shaderSingleColor.setMat4("model", model);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		// Rendering of floor
+		glBindVertexArray(planeVAO);
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		ourShader.setMat4("model", glm::mat4(1.0f));
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
-		glStencilMask(0xFF);
-		glStencilFunc(GL_ALWAYS, 0, 0xFF);
-		glEnable(GL_DEPTH_TEST);
+
+		// Rendering of vegetation
+		glBindVertexArray(vegetationVAO);
+		glBindTexture(GL_TEXTURE_2D, vegetationTexture);
+		for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, it->second);
+			ourShader.setMat4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -312,8 +325,16 @@ unsigned int loadTexture(char const * path)
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		if (nrComponents == 4)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		}
+		else
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		}
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
