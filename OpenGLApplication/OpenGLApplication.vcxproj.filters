@@ -46,7 +46,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="stencil_single_color.frag">
+    <None Include="framebuffers_screen.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="framebuffers_screen.frag">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
