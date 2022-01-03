@@ -133,6 +133,7 @@ private:
 		
 		return Mesh(vertices, indices, textures);
 	}
+
 	vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, string typeName)
 	{
 		vector<Texture> textures;
