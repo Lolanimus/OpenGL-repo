@@ -52,5 +52,11 @@
     <None Include="framebuffers_screen.frag">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="skybox.vert">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="skybox.frag">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
