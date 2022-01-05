@@ -156,10 +156,13 @@
     <ClInclude Include="shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="framebuffers_screen.frag" />
-    <None Include="framebuffers_screen.vert" />
+    <None Include="blue.frag" />
+    <None Include="glslshadertest.vert" />
+    <None Include="green.frag" />
+    <None Include="red.frag" />
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
+    <None Include="yellow.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

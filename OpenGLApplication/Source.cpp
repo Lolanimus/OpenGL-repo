@@ -60,6 +60,10 @@ int main()
 
 	Shader shader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/cube.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/cube.frag");
 	Shader skyboxShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/skybox.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/skybox.frag");
+	Shader shaderRed("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/glslshadertest.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/red.frag");
+	Shader shaderGreen("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/glslshadertest.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/green.frag");
+	Shader shaderBlue("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/glslshadertest.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/blue.frag");
+	Shader shaderYellow("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/glslshadertest.vert", "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/yellow.frag");
 
 	Model ourModel("C:/Libs/OpenGL/Models/super-mario/source/RippedModel/mario.obj");
 
@@ -176,6 +180,32 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glBindVertexArray(0);
 
+	// Uniform Blocks
+	unsigned int uniformBlockIndexRed = glGetUniformBlockIndex(shaderRed.ID, "Matrices");
+	unsigned int uniformBlockIndexGreen = glGetUniformBlockIndex(shaderGreen.ID, "Matrices");
+	unsigned int uniformBlockIndexBlue = glGetUniformBlockIndex(shaderBlue.ID, "Matrices");
+	unsigned int uniformBlockIndexYellow = glGetUniformBlockIndex(shaderYellow.ID, "Matrices");
+
+	glUniformBlockBinding(shaderRed.ID, uniformBlockIndexRed, 0);
+	glUniformBlockBinding(shaderGreen.ID, uniformBlockIndexGreen, 0);
+	glUniformBlockBinding(shaderBlue.ID, uniformBlockIndexBlue, 0);
+	glUniformBlockBinding(shaderYellow.ID, uniformBlockIndexYellow, 0);
+
+	// Uniform Buffer Object (UBO)
+	unsigned int uboMatrices;
+	glGenBuffers(1, &uboMatrices);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
+
+	glm::mat4 projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 	// Texture import
 	unsigned int cubeTexture = loadTexture("C:/Libs/OpenGL/Textures/marble.jpg");
 	
@@ -212,52 +242,44 @@ int main()
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glEnable(GL_DEPTH_TEST);
 
-		shader.use();
-		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		shader.setMat4("model", model);
-		shader.setMat4("view", view);
-		shader.setMat4("projection", projection);
-		shader.setVec3("cameraPos", camera.Position);
+		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-		// Rendering of cube
-		// glBindVertexArray(cubeVAO);
-		// glActiveTexture(GL_TEXTURE0);
-		// glBindTexture(GL_TEXTURE_2D, cubemapTexture);
-		// glDrawArrays(GL_TRIANGLES, 0, 36);
-		// glBindVertexArray(0);
+		glBindVertexArray(cubeVAO);
 
-		// Rendering of model
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		shader.setMat4("model", model);
-		ourModel.Draw(shader);
-
-		glDepthFunc(GL_LEQUAL);
-		skyboxShader.use();
-		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
-		skyboxShader.setMat4("view", view);
-		skyboxShader.setMat4("projection", projection);
-
-		glBindVertexArray(skyboxVAO);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		shaderRed.use();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-0.75f, 0.75f, 0.0f));
+		shaderRed.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-		glDepthMask(GL_LESS);
+
+		shaderGreen.use();
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.75f, 0.75f, 0.0f));
+		shaderGreen.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		shaderBlue.use();
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-0.75f, -0.75f, 0.0f));
+		shaderBlue.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		shaderYellow.use();
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.75f, -0.75f, 0.0f));
+		shaderYellow.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
 	glDeleteVertexArrays(1, &cubeVAO);
-	glDeleteVertexArrays(1, &skyboxVAO);
 	glDeleteBuffers(1, &cubeVBO);
-	glDeleteBuffers(1, &skyboxVBO);
-
 
 	glfwTerminate();
 	return 0;
