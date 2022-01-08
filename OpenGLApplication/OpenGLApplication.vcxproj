@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="blue.frag" />
+    <None Include="geomshader.geom" />
     <None Include="glslshadertest.vert" />
     <None Include="green.frag" />
     <None Include="red.frag" />
