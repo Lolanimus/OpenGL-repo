@@ -58,9 +58,12 @@ int main()
 	
 	glEnable(GL_DEPTH_TEST);
 
-	Shader shader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/vertshader.vert", 
-		          "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/geomshader.geom",
-		          "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/fragshader.frag");
+	Shader normalShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/vertshader.vert", 
+						"C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/fragshader.frag",
+						"C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/geomshader.geom");
+	
+	Shader shader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/defaultshader.vert",
+				  "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/defaultshader.frag");
 	
 	Model ourModel("C:/Libs/OpenGL/Models/super-mario/source/RippedModel/mario.obj");
 
@@ -83,9 +86,14 @@ int main()
 		shader.setMat4("view", view);
 		shader.setMat4("projection", projection);
 
-		shader.setFloat("time", glfwGetTime());
-
 		ourModel.Draw(shader);
+
+		normalShader.use();
+		normalShader.setMat4("model", model);
+		normalShader.setMat4("view", view);
+		normalShader.setMat4("projection", projection);
+
+		ourModel.Draw(normalShader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

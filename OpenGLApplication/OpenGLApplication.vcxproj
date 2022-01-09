@@ -156,14 +156,13 @@
     <ClInclude Include="shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="blue.frag" />
+    <None Include="defaultshader.frag" />
+    <None Include="defaultshader.vert" />
+    <None Include="fragshader.frag" />
     <None Include="geomshader.geom" />
-    <None Include="glslshadertest.vert" />
-    <None Include="green.frag" />
-    <None Include="red.frag" />
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
-    <None Include="yellow.frag" />
+    <None Include="vertshader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

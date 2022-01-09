@@ -13,27 +13,39 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{c5b1bc98-2e87-4c77-93d2-8d572e865419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Includes">
+      <UniqueIdentifier>{50677973-ff5c-48d9-bb68-61504d3e89c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\NormalShader">
+      <UniqueIdentifier>{fec4a746-4e7b-4086-9286-916fa7f8542c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\ModelShader">
+      <UniqueIdentifier>{246f2440-59bf-41f8-b1a1-0fa009a8ecfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\SkyBoxShader">
+      <UniqueIdentifier>{46c41b8d-9258-48a0-a18a-92bf91c2be81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Source Files\Includes</Filter>
+    </ClCompile>
     <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Includes</Filter>
     </ClCompile>
     <ClCompile Include="shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Includes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\Libs\OpenGL\stb_image\stb_image.h">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
@@ -44,31 +56,31 @@
     <ClInclude Include="model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\Libs\OpenGL\stb_image\stb_image.h">
+      <Filter>Source Files\Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="skybox.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="skybox.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="glslshadertest.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="blue.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="green.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="red.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="yellow.frag">
-      <Filter>Source Files</Filter>
+    <None Include="vertshader.vert">
+      <Filter>Source Files\Shaders\NormalShader</Filter>
     </None>
     <None Include="geomshader.geom">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Shaders\NormalShader</Filter>
+    </None>
+    <None Include="fragshader.frag">
+      <Filter>Source Files\Shaders\NormalShader</Filter>
+    </None>
+    <None Include="defaultshader.frag">
+      <Filter>Source Files\Shaders\ModelShader</Filter>
+    </None>
+    <None Include="defaultshader.vert">
+      <Filter>Source Files\Shaders\ModelShader</Filter>
+    </None>
+    <None Include="skybox.vert">
+      <Filter>Source Files\Shaders\SkyBoxShader</Filter>
+    </None>
+    <None Include="skybox.frag">
+      <Filter>Source Files\Shaders\SkyBoxShader</Filter>
     </None>
   </ItemGroup>
 </Project>
