@@ -66,7 +66,7 @@ int main()
 	Model planetModel("C:/Libs/OpenGL/Models/planet/planet.obj");
 	Model rockModel("C:/Libs/OpenGL/Models/rock/rock.obj");
 
-	unsigned int amount = 100000;
+	unsigned int amount = 10000;
 	glm::mat4* modelMatrices;
 	modelMatrices = new glm::mat4[amount];
 	srand(glfwGetTime());
