@@ -27,6 +27,7 @@ public:
     vector<Vertex>       vertices;
     vector<unsigned int> indices;
     vector<Texture>      textures;
+    unsigned int VAO, VBO, EBO;
 
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
     {
@@ -61,8 +62,6 @@ public:
     }
 private:
     // Render data
-    unsigned int VAO, VBO, EBO;
-
     void setupMesh()
     {
         glGenVertexArrays(1, &VAO);

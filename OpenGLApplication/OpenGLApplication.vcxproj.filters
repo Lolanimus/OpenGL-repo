@@ -70,10 +70,10 @@
     <None Include="fragshader.frag">
       <Filter>Source Files\Shaders\NormalShader</Filter>
     </None>
-    <None Include="defaultshader.frag">
+    <None Include="planetshader.frag">
       <Filter>Source Files\Shaders\ModelShader</Filter>
     </None>
-    <None Include="defaultshader.vert">
+    <None Include="planetshader.vert">
       <Filter>Source Files\Shaders\ModelShader</Filter>
     </None>
     <None Include="skybox.vert">
@@ -81,6 +81,12 @@
     </None>
     <None Include="skybox.frag">
       <Filter>Source Files\Shaders\SkyBoxShader</Filter>
+    </None>
+    <None Include="rockshader.vert">
+      <Filter>Source Files\Shaders\ModelShader</Filter>
+    </None>
+    <None Include="rockshader.frag">
+      <Filter>Source Files\Shaders\ModelShader</Filter>
     </None>
   </ItemGroup>
 </Project>

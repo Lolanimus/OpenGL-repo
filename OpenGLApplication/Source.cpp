@@ -58,14 +58,72 @@ int main()
 	
 	glEnable(GL_DEPTH_TEST);
 
-	Shader normalShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/vertshader.vert", 
-						"C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/fragshader.frag",
-						"C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/geomshader.geom");
-	
-	Shader shader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/defaultshader.vert",
-				  "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/defaultshader.frag");
-	
-	Model ourModel("C:/Libs/OpenGL/Models/super-mario/source/RippedModel/mario.obj");
+	Shader planetShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/planetshader.vert",
+						"C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/planetshader.frag");
+	Shader rockShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/rockshader.vert",
+					  "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/rockshader.frag");
+
+	Model planetModel("C:/Libs/OpenGL/Models/planet/planet.obj");
+	Model rockModel("C:/Libs/OpenGL/Models/rock/rock.obj");
+
+	unsigned int amount = 100000;
+	glm::mat4* modelMatrices;
+	modelMatrices = new glm::mat4[amount];
+	srand(glfwGetTime());
+	float radius = 200.0;
+	float offset = 2.5f;
+	for (unsigned int i = 0; i < amount; i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+
+		// Translaton
+		float angle = (float)i / (float)amount * 360.0f;
+		float displacement = (rand() % (int)(2 * offset * 2000) / 100.0f - offset);
+		float x = sin(angle) * radius + displacement;
+		displacement = (rand() % (int)(2 * offset * 700) / 100.0f - offset);
+		float y = displacement * 0.4;
+		displacement = (rand() % (int)(2 * offset * 2000) / 100.0f - offset);
+		float z = cos(angle) * radius + displacement;
+		model = glm::translate(model, glm::vec3(x, y, z));
+
+		// Scale
+		float scale = (rand() % 20) / 100.0f + 0.05;
+		model = glm::scale(model, glm::vec3(scale));
+
+		// Rotate
+		float rotAngle = (rand() % 360);
+		model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+
+		modelMatrices[i] = model;
+	}
+
+	unsigned int buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
+
+	for (unsigned int i = 0; i < rockModel.meshes.size(); i++)
+	{
+		unsigned int VAO = rockModel.meshes[i].VAO;
+		glBindVertexArray(VAO);
+
+		std::size_t vec4Size = sizeof(glm::vec4);
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(1 * vec4Size));
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);
+
+		glBindVertexArray(0);
+	}
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -78,22 +136,30 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.01f, 800.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		shader.use();
-		shader.setMat4("model", model);
-		shader.setMat4("view", view);
-		shader.setMat4("projection", projection);
+		rockShader.use();
+		rockShader.setMat4("projection", projection);
+		rockShader.setMat4("view", view);
+		planetShader.use();
+		planetShader.setMat4("projection", projection);
+		planetShader.setMat4("view", view);
 
-		ourModel.Draw(shader);
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(50.0f, 0.0f, 50.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
+		planetShader.setMat4("model", model);
+		planetModel.Draw(planetShader);
 
-		normalShader.use();
-		normalShader.setMat4("model", model);
-		normalShader.setMat4("view", view);
-		normalShader.setMat4("projection", projection);
-
-		ourModel.Draw(normalShader);
+		rockShader.use();
+		rockShader.setInt("texture_diffuse1", 0);
+		glActiveTexture(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, rockModel.textures_loaded[0].id);
+		for (unsigned int i = 0; i < rockModel.meshes.size(); i++)
+		{
+			glBindVertexArray(rockModel.meshes[i].VAO);
+			glDrawElementsInstanced(GL_TRIANGLES, rockModel.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
