@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Shaders\SkyBoxShader">
       <UniqueIdentifier>{46c41b8d-9258-48a0-a18a-92bf91c2be81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\PostProcessingShader">
+      <UniqueIdentifier>{aacab781-23c4-4592-9eb2-e589f412dcf0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -87,6 +90,12 @@
     </None>
     <None Include="rockshader.frag">
       <Filter>Source Files\Shaders\ModelShader</Filter>
+    </None>
+    <None Include="postprocessing_aa.vert">
+      <Filter>Source Files\Shaders\PostProcessingShader</Filter>
+    </None>
+    <None Include="postprocessing_aa.frag">
+      <Filter>Source Files\Shaders\PostProcessingShader</Filter>
     </None>
   </ItemGroup>
 </Project>
