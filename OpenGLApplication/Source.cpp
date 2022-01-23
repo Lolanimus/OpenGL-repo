@@ -13,13 +13,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow* window);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-unsigned int loadTexture(const char* path);
+unsigned int loadTexture(const char* path, bool gammaCorrection);
 unsigned int loadCubemap(vector<std::string> faces);
 
 float valueOfTextures = 0.3f;
 
 const unsigned int SRC_WIDTH = 1910.0f;
 const unsigned int SRC_HEIGHT = 1050.0f;
+bool gamma = false;
+bool gammaKeyPressed = false;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SRC_WIDTH / 2;
@@ -29,8 +31,6 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 int samples = 4;
-
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
@@ -59,143 +59,68 @@ int main()
 	}    
 	
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	Shader planetShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/planetshader.vert",
-						"C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/planetshader.frag");
-	Shader rockShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/rockshader.vert",
-					  "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/rockshader.frag");
-	Shader screenShader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/postprocessing_aa.vert",
-					    "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/postprocessing_aa.frag");
+	Shader shader("C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/lightingshader.vert",
+				  "C:/Users/antox/source/repos/OpenGLApplication/OpenGLApplication/lightingshader.frag");
 
-	Model planetModel("C:/Libs/OpenGL/Models/planet/planet.obj");
-	Model rockModel("C:/Libs/OpenGL/Models/rock/rock.obj");
 
-	float quadVertices[] = {
-		// positions   // texCoords
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		-1.0f, -1.0f,  0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
+	float planeVertices[] = {
+		// positions            // normals         // texcoords
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
 
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		 1.0f, -1.0f,  1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f, 1.0f
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
 	};
 
-	unsigned int quadVAO, quadVBO;
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	unsigned int planeVAO, planeVBO;
+	glGenVertexArrays(1, &planeVAO);
+	glGenBuffers(1, &planeVBO);
+	glBindVertexArray(planeVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), &planeVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glBindVertexArray(0);
 
-	unsigned int amount = 1000;
-	glm::mat4* modelMatrices;
-	modelMatrices = new glm::mat4[amount];
-	srand(glfwGetTime());
-	float radius = 200.0;
-	float offset = 2.5f;
-	for (unsigned int i = 0; i < amount; i++)
-	{
-		glm::mat4 model = glm::mat4(1.0f);
+	unsigned int floorTextureRGB = loadTexture("C:/Libs/OpenGL/Textures/get.png", false);
+	unsigned int floorTextureSRGB = loadTexture("C:/Libs/OpenGL/Textures/get.png", true);
 
-		// Translaton
-		float angle = (float)i / (float)amount * 360.0f;
-		float displacement = (rand() % (int)(2 * offset * 2000) / 100.0f - offset);
-		float x = sin(angle) * radius + displacement;
-		displacement = (rand() % (int)(2 * offset * 1000) / 100.0f - offset);
-		float y = displacement * 0.4;
-		displacement = (rand() % (int)(2 * offset * 2000) / 100.0f - offset);
-		float z = cos(angle) * radius + displacement;
-		model = glm::translate(model, glm::vec3(x, y, z));
+	shader.use();
+	shader.setInt("texture1", 0);
 
-		// Scale
-		float scale = (rand() % 20) / 100.0f + 0.05;
-		model = glm::scale(model, glm::vec3(scale));
-
-		// Rotate
-		float rotAngle = (rand() % 360);
-		model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
-
-		modelMatrices[i] = model;
-	}
-
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
-
-	for (unsigned int i = 0; i < rockModel.meshes.size(); i++)
-	{
-		unsigned int VAO = rockModel.meshes[i].VAO;
-		glBindVertexArray(VAO);
-
-		std::size_t vec4Size = sizeof(glm::vec4);
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)0);
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(1 * vec4Size));
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(2 * vec4Size));
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(3 * vec4Size));
-
-		glVertexAttribDivisor(3, 1);
-		glVertexAttribDivisor(4, 1);
-		glVertexAttribDivisor(5, 1);
-		glVertexAttribDivisor(6, 1);
-
-		glBindVertexArray(0);
-	}
-
-	// MSAA
-	unsigned int fbo;
-	glGenFramebuffers(1, &fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	
-		unsigned int tex;
-		glGenTextures(1, &tex);
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex);
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, SRC_WIDTH, SRC_HEIGHT, GL_TRUE);
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex, 0);
-
-		unsigned int rbo;
-		glGenBuffers(1, &rbo);
-		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, SRC_WIDTH, SRC_HEIGHT);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// FBO for post-processing
-	unsigned int intermediateFBO;
-	glGenFramebuffers(1, &intermediateFBO);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, intermediateFBO);
-
-		unsigned int colorTex;
-		glGenTextures(1, &colorTex);
-		glBindTexture(GL_TEXTURE_2D, colorTex);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SRC_WIDTH, SRC_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
-	
-		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << endl;
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	screenShader.setInt("colorTex", 0);
+	glm::vec3 lightPositions[] = {
+		glm::vec3(-9.0f, -0.45, 0.0f),
+		glm::vec3(-7.0f, -0.4, 0.0f),
+		glm::vec3(-5.0f, -0.3, 0.0f),
+		glm::vec3(-3.0f, -0.2, 0.0f),
+		glm::vec3(-1.0f, -0.1, 0.0f),
+		glm::vec3(1.0f, 0.0, 0.0f),
+		glm::vec3(3.0f, 0.1, 0.0f),
+		glm::vec3(5.0f, 0.2, 0.0f),
+		glm::vec3(7.0f, 0.3, 0.0f),
+		glm::vec3(9.0f, 0.4f, 0.0f),
+	};
+	glm::vec3 lightColors[] = {
+		glm::vec3(0.1),
+		glm::vec3(0.2),
+		glm::vec3(0.3),
+		glm::vec3(0.4),
+		glm::vec3(0.5),
+		glm::vec3(0.6),
+		glm::vec3(0.7),
+		glm::vec3(0.8),
+		glm::vec3(0.9),
+		glm::vec3(1.0)
+	};
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -208,56 +133,29 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		shader.use();
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SRC_WIDTH / (float)SRC_HEIGHT, 0.01f, 500.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		shader.setMat4("projection", projection);
+		shader.setMat4("view", view);
+		glUniform3fv(glGetUniformLocation(shader.ID, "lightPositions"), 10, &lightPositions[0][0]);
+		glUniform3fv(glGetUniformLocation(shader.ID, "lightColors"), 10, &lightColors[0][0]);
+		shader.setVec3("viewPos", camera.Position);
+		shader.setInt("gamma", gamma);
 
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glEnable(GL_DEPTH_TEST);
-
-			glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SRC_WIDTH / (float)SRC_HEIGHT, 0.01f, 800.0f);
-			glm::mat4 view = camera.GetViewMatrix();
-			rockShader.use();
-			rockShader.setMat4("projection", projection);
-			rockShader.setMat4("view", view);
-			planetShader.use();
-			planetShader.setMat4("projection", projection);
-			planetShader.setMat4("view", view);
-
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, glm::vec3(50.0f, 0.0f, 50.0f));
-			model = glm::scale(model, glm::vec3(30.0f, 30.0f, 30.0f));
-			planetShader.setMat4("model", model);
-			planetModel.Draw(planetShader);
-
-			rockShader.use();
-			rockShader.setInt("texture_diffuse1", 0);
-			glActiveTexture(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, rockModel.textures_loaded[0].id);
-			for (unsigned int i = 0; i < rockModel.meshes.size(); i++)
-			{
-				glBindVertexArray(rockModel.meshes[i].VAO);
-				glDrawElementsInstanced(GL_TRIANGLES, rockModel.meshes[i].indices.size(), GL_UNSIGNED_INT, 0, amount);
-			}
-
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo);
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, intermediateFBO);
-			glBlitFramebuffer(0, 0, SRC_WIDTH, SRC_HEIGHT, 0, 0, SRC_WIDTH, SRC_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		glEnable(GL_DEPTH_TEST);
-
-		screenShader.use();
-		glBindVertexArray(quadVAO);
+		glBindVertexArray(planeVAO);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, colorTex);
+		glBindTexture(GL_TEXTURE_2D, gamma ? floorTextureSRGB : floorTextureRGB);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		std::cout << (gamma ? "Gamma enabled" : "Gamma disabled") << std::endl;
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	glDeleteVertexArrays(1, &planeVAO);
+	glDeleteBuffers(1, &planeVBO);
 
 	glfwTerminate();
 	return 0;
@@ -280,6 +178,13 @@ void processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !gammaKeyPressed)
+	{
+		gamma = !gamma;
+		gammaKeyPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+		gammaKeyPressed = false;
 }
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -302,7 +207,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-unsigned int loadTexture(char const * path)
+unsigned int loadTexture(char const * path, bool gammaCorrection)
 {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
@@ -311,22 +216,31 @@ unsigned int loadTexture(char const * path)
 	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
 	if (data)
 	{
-		GLenum format;
+		GLenum internalFormat;
+		GLenum dataFormat;
 		if (nrComponents == 1)
-			format = GL_RED;
+		{
+			dataFormat = GL_RED;
+		}
 		else if (nrComponents == 3)
-			format = GL_RGB;
+		{
+			internalFormat = gammaCorrection ? GL_SRGB : GL_RGB;
+			dataFormat = GL_RGB;
+		}
 		else if (nrComponents == 4)
-			format = GL_RGBA;
+		{
+			internalFormat = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+			dataFormat = GL_RGBA;
+		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		if (nrComponents == 4)
 		{
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		}
 		else
 		{

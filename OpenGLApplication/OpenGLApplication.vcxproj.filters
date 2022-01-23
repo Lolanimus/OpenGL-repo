@@ -31,6 +31,15 @@
     <Filter Include="Source Files\Shaders\PostProcessingShader">
       <UniqueIdentifier>{aacab781-23c4-4592-9eb2-e589f412dcf0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\ModelShader\Planet">
+      <UniqueIdentifier>{96de33bf-bbe5-45db-8cb3-f5719a54836c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\ModelShader\Rock">
+      <UniqueIdentifier>{133a918c-86fa-4778-8b14-4ab0981fc9a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Lighting">
+      <UniqueIdentifier>{75341175-4cef-4ac2-aa46-e95ac90e0d99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -73,29 +82,35 @@
     <None Include="fragshader.frag">
       <Filter>Source Files\Shaders\NormalShader</Filter>
     </None>
-    <None Include="planetshader.frag">
-      <Filter>Source Files\Shaders\ModelShader</Filter>
-    </None>
-    <None Include="planetshader.vert">
-      <Filter>Source Files\Shaders\ModelShader</Filter>
-    </None>
     <None Include="skybox.vert">
       <Filter>Source Files\Shaders\SkyBoxShader</Filter>
     </None>
     <None Include="skybox.frag">
       <Filter>Source Files\Shaders\SkyBoxShader</Filter>
     </None>
-    <None Include="rockshader.vert">
-      <Filter>Source Files\Shaders\ModelShader</Filter>
-    </None>
-    <None Include="rockshader.frag">
-      <Filter>Source Files\Shaders\ModelShader</Filter>
-    </None>
     <None Include="postprocessing_aa.vert">
       <Filter>Source Files\Shaders\PostProcessingShader</Filter>
     </None>
     <None Include="postprocessing_aa.frag">
       <Filter>Source Files\Shaders\PostProcessingShader</Filter>
+    </None>
+    <None Include="planetshader.vert">
+      <Filter>Source Files\Shaders\ModelShader\Planet</Filter>
+    </None>
+    <None Include="planetshader.frag">
+      <Filter>Source Files\Shaders\ModelShader\Planet</Filter>
+    </None>
+    <None Include="rockshader.vert">
+      <Filter>Source Files\Shaders\ModelShader\Rock</Filter>
+    </None>
+    <None Include="rockshader.frag">
+      <Filter>Source Files\Shaders\ModelShader\Rock</Filter>
+    </None>
+    <None Include="lightingshader.vert">
+      <Filter>Source Files\Shaders\Lighting</Filter>
+    </None>
+    <None Include="lightingshader.frag">
+      <Filter>Source Files\Shaders\Lighting</Filter>
     </None>
   </ItemGroup>
 </Project>
