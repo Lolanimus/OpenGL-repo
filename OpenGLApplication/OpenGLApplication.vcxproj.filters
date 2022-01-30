@@ -40,6 +40,15 @@
     <Filter Include="Source Files\Shaders\Lighting">
       <UniqueIdentifier>{75341175-4cef-4ac2-aa46-e95ac90e0d99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Lighting\ShadowShader">
+      <UniqueIdentifier>{301d1404-5ec9-4006-bffc-6259e1d6714f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Lighting\WorldShader">
+      <UniqueIdentifier>{2e3f4b43-47a2-4e61-bf5f-548dd07753ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Lighting\Blinn-Fong">
+      <UniqueIdentifier>{f2453e4a-0b90-4cc4-85fc-481ff8149228}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -106,11 +115,23 @@
     <None Include="rockshader.frag">
       <Filter>Source Files\Shaders\ModelShader\Rock</Filter>
     </None>
+    <None Include="shadow_mapping.vert">
+      <Filter>Source Files\Shaders\Lighting\ShadowShader</Filter>
+    </None>
+    <None Include="shadow_mapping.frag">
+      <Filter>Source Files\Shaders\Lighting\ShadowShader</Filter>
+    </None>
+    <None Include="quad_depth.vert">
+      <Filter>Source Files\Shaders\Lighting\WorldShader</Filter>
+    </None>
+    <None Include="quad_depth.frag">
+      <Filter>Source Files\Shaders\Lighting\WorldShader</Filter>
+    </None>
     <None Include="lightingshader.vert">
-      <Filter>Source Files\Shaders\Lighting</Filter>
+      <Filter>Source Files\Shaders\Lighting\Blinn-Fong</Filter>
     </None>
     <None Include="lightingshader.frag">
-      <Filter>Source Files\Shaders\Lighting</Filter>
+      <Filter>Source Files\Shaders\Lighting\Blinn-Fong</Filter>
     </None>
   </ItemGroup>
 </Project>

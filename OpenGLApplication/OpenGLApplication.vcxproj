@@ -158,6 +158,8 @@
   <ItemGroup>
     <None Include="lightingshader.frag" />
     <None Include="lightingshader.vert" />
+    <None Include="quad_depth.frag" />
+    <None Include="quad_depth.vert" />
     <None Include="postprocessing_aa.frag" />
     <None Include="postprocessing_aa.vert" />
     <None Include="planetshader.frag" />
@@ -169,6 +171,8 @@
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
     <None Include="vertshader.vert" />
+    <None Include="shadow_mapping.frag" />
+    <None Include="shadow_mapping.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
