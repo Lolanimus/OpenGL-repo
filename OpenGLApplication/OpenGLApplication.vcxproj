@@ -168,6 +168,7 @@
     <None Include="geomshader.geom" />
     <None Include="rockshader.frag" />
     <None Include="rockshader.vert" />
+    <None Include="shadow_mapping.geom" />
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
     <None Include="vertshader.vert" />

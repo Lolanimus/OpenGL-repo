@@ -133,5 +133,8 @@
     <None Include="lightingshader.frag">
       <Filter>Source Files\Shaders\Lighting\Blinn-Fong</Filter>
     </None>
+    <None Include="shadow_mapping.geom">
+      <Filter>Source Files\Shaders\Lighting\ShadowShader</Filter>
+    </None>
   </ItemGroup>
 </Project>
