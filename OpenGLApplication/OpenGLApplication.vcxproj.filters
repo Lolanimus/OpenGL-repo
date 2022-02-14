@@ -127,14 +127,14 @@
     <None Include="quad_depth.frag">
       <Filter>Source Files\Shaders\Lighting\WorldShader</Filter>
     </None>
+    <None Include="shadow_mapping.geom">
+      <Filter>Source Files\Shaders\Lighting\ShadowShader</Filter>
+    </None>
     <None Include="lightingshader.vert">
       <Filter>Source Files\Shaders\Lighting\Blinn-Fong</Filter>
     </None>
     <None Include="lightingshader.frag">
       <Filter>Source Files\Shaders\Lighting\Blinn-Fong</Filter>
-    </None>
-    <None Include="shadow_mapping.geom">
-      <Filter>Source Files\Shaders\Lighting\ShadowShader</Filter>
     </None>
   </ItemGroup>
 </Project>
