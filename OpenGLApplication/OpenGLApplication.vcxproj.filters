@@ -49,6 +49,9 @@
     <Filter Include="Source Files\Shaders\Lighting\Blinn-Fong">
       <UniqueIdentifier>{f2453e4a-0b90-4cc4-85fc-481ff8149228}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Lighting\HDR">
+      <UniqueIdentifier>{afa65450-37b4-41a1-8021-81825812eb35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -135,6 +138,12 @@
     </None>
     <None Include="lightingshader.frag">
       <Filter>Source Files\Shaders\Lighting\Blinn-Fong</Filter>
+    </None>
+    <None Include="hdr.vert">
+      <Filter>Source Files\Shaders\Lighting\HDR</Filter>
+    </None>
+    <None Include="hdr.frag">
+      <Filter>Source Files\Shaders\Lighting\HDR</Filter>
     </None>
   </ItemGroup>
 </Project>
