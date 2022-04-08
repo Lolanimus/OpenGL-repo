@@ -1,10 +1,10 @@
 ﻿  Source.cpp
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(24,32): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(25,33): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(132,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(325,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(326,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(327,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(328,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(335,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(25,32): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(26,33): warning C4244: 'initializing': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(172,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(435,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(436,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(437,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(438,10): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\antox\source\repos\OpenGLApplication\OpenGLApplication\Source.cpp(445,28): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   OpenGLApplication.vcxproj -> C:\Users\antox\source\repos\OpenGLApplication\x64\Debug\OpenGLApplication.exe

@@ -52,6 +52,12 @@
     <Filter Include="Source Files\Shaders\Lighting\HDR">
       <UniqueIdentifier>{afa65450-37b4-41a1-8021-81825812eb35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Lighting\LightingBox">
+      <UniqueIdentifier>{25c4e643-42aa-4636-92eb-2bfeece73c7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Lighting\Blur">
+      <UniqueIdentifier>{620cdd66-1463-40b7-a65d-b3f6edf5b9db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -144,6 +150,18 @@
     </None>
     <None Include="hdr.frag">
       <Filter>Source Files\Shaders\Lighting\HDR</Filter>
+    </None>
+    <None Include="lightingBox.vert">
+      <Filter>Source Files\Shaders\Lighting\LightingBox</Filter>
+    </None>
+    <None Include="lightingBox.frag">
+      <Filter>Source Files\Shaders\Lighting\LightingBox</Filter>
+    </None>
+    <None Include="blur.vert">
+      <Filter>Source Files\Shaders\Lighting\Blur</Filter>
+    </None>
+    <None Include="blur.frag">
+      <Filter>Source Files\Shaders\Lighting\Blur</Filter>
     </None>
   </ItemGroup>
 </Project>
