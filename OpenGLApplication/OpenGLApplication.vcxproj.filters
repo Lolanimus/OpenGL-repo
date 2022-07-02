@@ -58,6 +58,18 @@
     <Filter Include="Source Files\Shaders\Lighting\Blur">
       <UniqueIdentifier>{620cdd66-1463-40b7-a65d-b3f6edf5b9db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Deffered shader">
+      <UniqueIdentifier>{b8757c1f-3e1d-4145-8c5b-0ac34fb77d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Deffered shader\shaderGeometryPass">
+      <UniqueIdentifier>{8926a520-457c-4919-876b-c95d3646a3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Deffered shader\shaderLightingPass">
+      <UniqueIdentifier>{a1f28fcf-2053-45de-bcf5-2d173c5146e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Deffered shader\shaderLightBox">
+      <UniqueIdentifier>{b8cdfaf8-cd9c-483f-8314-94c49341cac7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -162,6 +174,24 @@
     </None>
     <None Include="blur.frag">
       <Filter>Source Files\Shaders\Lighting\Blur</Filter>
+    </None>
+    <None Include="gBuffer.vert">
+      <Filter>Source Files\Shaders\Deffered shader\shaderGeometryPass</Filter>
+    </None>
+    <None Include="gBuffer.frag">
+      <Filter>Source Files\Shaders\Deffered shader\shaderGeometryPass</Filter>
+    </None>
+    <None Include="defferd_shading.vert">
+      <Filter>Source Files\Shaders\Deffered shader\shaderLightingPass</Filter>
+    </None>
+    <None Include="defferd_shading.frag">
+      <Filter>Source Files\Shaders\Deffered shader\shaderLightingPass</Filter>
+    </None>
+    <None Include="defferd_light_box.vert">
+      <Filter>Source Files\Shaders\Deffered shader\shaderLightBox</Filter>
+    </None>
+    <None Include="defferd_light_box.frag">
+      <Filter>Source Files\Shaders\Deffered shader\shaderLightBox</Filter>
     </None>
   </ItemGroup>
 </Project>

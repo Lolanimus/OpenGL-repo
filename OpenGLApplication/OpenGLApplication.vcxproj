@@ -158,6 +158,12 @@
   <ItemGroup>
     <None Include="blur.frag" />
     <None Include="blur.vert" />
+    <None Include="defferd_light_box.frag" />
+    <None Include="defferd_light_box.vert" />
+    <None Include="defferd_shading.frag" />
+    <None Include="defferd_shading.vert" />
+    <None Include="gBuffer.frag" />
+    <None Include="gBuffer.vert" />
     <None Include="hdr.frag" />
     <None Include="hdr.vert" />
     <None Include="lightingBox.frag" />
