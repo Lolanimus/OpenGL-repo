@@ -183,6 +183,9 @@
     <None Include="shadow_mapping.geom" />
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
+    <None Include="ssao.frag" />
+    <None Include="ssao.vert" />
+    <None Include="ssaoBlur.frag" />
     <None Include="vertshader.vert" />
     <None Include="shadow_mapping.frag" />
     <None Include="shadow_mapping.vert" />

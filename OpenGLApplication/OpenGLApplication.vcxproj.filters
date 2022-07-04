@@ -70,6 +70,15 @@
     <Filter Include="Source Files\Shaders\Deffered shader\shaderLightBox">
       <UniqueIdentifier>{b8cdfaf8-cd9c-483f-8314-94c49341cac7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Ambient Occlusion">
+      <UniqueIdentifier>{deee1438-d969-4a54-8ebe-5ee130783b24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Ambient Occlusion\SSAO">
+      <UniqueIdentifier>{f053af34-5145-4c98-98d4-abf1de10187b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Ambient Occlusion\SSAOBlur">
+      <UniqueIdentifier>{38b2b5e9-0a09-41e6-bf61-df76cf214096}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -192,6 +201,15 @@
     </None>
     <None Include="defferd_light_box.frag">
       <Filter>Source Files\Shaders\Deffered shader\shaderLightBox</Filter>
+    </None>
+    <None Include="ssao.frag">
+      <Filter>Source Files\Shaders\Ambient Occlusion\SSAO</Filter>
+    </None>
+    <None Include="ssao.vert">
+      <Filter>Source Files\Shaders\Ambient Occlusion\SSAO</Filter>
+    </None>
+    <None Include="ssaoBlur.frag">
+      <Filter>Source Files\Shaders\Ambient Occlusion\SSAOBlur</Filter>
     </None>
   </ItemGroup>
 </Project>
